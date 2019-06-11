@@ -1,0 +1,12 @@
+﻿  Parser.cpp
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(74): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(214): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(265): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(276): warning C4018: '<=': signed/unsigned mismatch
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(282): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(283): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(333): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(336): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(342): warning C4129: '(': unrecognized character escape sequence
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(367): warning C4018: '<': signed/unsigned mismatch
+  LenguajesProy.vcxproj -> C:\Users\Usuario\Documents\Visual Studio 2017\Projects\LenguajesProy\Debug\LenguajesProy.exe
