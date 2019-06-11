@@ -216,9 +216,34 @@ void Parser::buildPost(vector<string>cmd) {
 			this->result.push_back(cmd[i]);
 		}
 		else if (checkS(cmd[i])) {
+			//n
 			if (i > 0) {
-
+				if (!stack.empty()) {
+					int size = stack.size();
+					if (cmd[i] == "+" || cmd[i] == "-") {
+						if (stack[size-1] == "+" || stack[size - 1] == "-") {
+							this->stack.pop_back();
+							this->stack.push_back(cmd[i]);
+						}
+						if (stack[size - 1] == "*" || stack[size - 1] == "/" || stack[size - 1] == "^" || stack[size - 1] == "%") {
+							vector<string> temp;
+							int z = size;
+							while (stack[z - 1] != "+" || stack[z - 1] != "-") {
+								temp.push_back(stack[z - 1]);
+								this->stack.pop_back();
+								z--;
+							}
+							this->stack.push_back(cmd[i]);
+							int j = temp.size();
+							for (int k = j - 1; k >= 0; k++) {
+								this->stack.push_back(temp[k]);
+								temp.pop_back();
+							}
+						}
+					}
+				}
 			}
+			//n
 			this->stack.push_back(cmd[i]);
 			if (cmd[i] == "]") {
 				int sizec = stack.size() - 1;
@@ -274,7 +299,7 @@ int Parser::answer(vector<string>res) {
 	}
 	else {
 		for (int i = 0; i <= res.size() - 1; i++) {
-			if (checkF(res[i])) {
+			if (checkD(res[i])) {
 				answ.push_back(res[i]);
 			}
 			if (checkO(res[i])) {
