@@ -5,14 +5,16 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
 class Parser
 {
 private:
+	
 	vector<string> result;
-	vector<string> stack;
+	stack<string> stak;
 public:
 	vector<string> digitos;
 	vector<string> simbolos;
@@ -28,11 +30,14 @@ public:
 	bool checkO(string word);
 	bool checkD(string word);
 	bool checkPC(string word);
-	bool checkAll(string word);
+	bool firstnum(string word);
+	[[nodiscard]] bool checkAll(string word); //Feature de c++ 17 -> [[nodiscard]]
 
 	void buildPost(vector<string> word);
+	void divideNegative();
 
 	int answer(vector<string> result);
+	int precedence(string s);
 
 	void loop();
 	Parser();
