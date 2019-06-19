@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "Parser.h"
 #include <regex>
-
-[[maybe_unused]] static int cant = 9; //Feature de c++ 11 -> inicializacion de miembros dentro de una clase, 
-									  //Feature de c++ 17 -> [[maybe_unused]]
+#include <sstream>
+#include <iomanip>
 
 //Guarda la lista de de digitos y simbolos para verificar que no se metan caracteres invalidos
 Parser::Parser()
@@ -14,7 +13,7 @@ Parser::Parser()
 
 //Revisa si el el primer caracter de este elemento es valido. Se deben permitir digitos, parentesis, corchetes, o signo negativo
 bool Parser::checkF(string word) {
-	if (word[0] == '(' || word[0] == '[' || word[0] == '-') {
+	if (word[0] == '(' || word[0] == '[') {
 		return true;
 	}
 	for (int i = 0; i < 10; i++) {
@@ -89,6 +88,10 @@ bool Parser::checkO(string word) {
 
 //Esta funcion revisa toda la expresion par ver si es valida
 bool Parser::checkAll(string word) {
+	if (word.length() == 0) {
+		cout << "No ingreso nada" << endl;
+		return false;
+	}
 	//Estas variables ayudan a ver si se cierran todos los parentesis y corchetes que se abren
 	int brackets = 0;
 	int parenthesis = 0;
@@ -97,10 +100,10 @@ bool Parser::checkAll(string word) {
 	for (int i = 0; i < word.size(); i++) {
 		string s;
 		s = word[i];
-		bool digit = checkF(s);
+		bool digit = checkD(s);
 		bool sign = checkS(s);
 		//Si se encuentra un elemento que no es parte de la lista de digitos o simbolos, se tira un mensaje de error
-		if (checkF(s) == false && checkS(s) == false) {
+		if (checkD(s) == false && checkS(s) == false) {
 			cout << "Caracter " << word[i] << " es invalido" << endl;
 			return false;
 		}
@@ -112,45 +115,48 @@ bool Parser::checkAll(string word) {
 				//Esta variable es el elemento a la izquierda del parentesis o corchete
 				string num;
 				num = word[i - 1];
-				//Esta variable es el elemento a la derecha del parentesis o corchete
-				string num1;
-				num1 = word[i + 1];
 				//Mira si hay un numero a la izquierda
-				if (checkD(num)) {
-					cout << "Expresion incompleta" << endl;
-					return false;
-				}
-				//Debe haber un numero a la derecha, si no lo hay retorna falso
-				if (num1 == "*" || num1 == "/" || num1 == "%" || num1 == "^" || num1 == ".") {
+				if (checkD(num) && num != "[" && num != "(") {
 					cout << "Expresion incompleta" << endl;
 					return false;
 				}
 			}
+				//Esta variable es el elemento a la derecha del parentesis o corchete
+			string num1;
+			num1 = word[i + 1];
+
+				//Debe haber un numero a la derecha, si no lo hay retorna falso
+				if (!checkD(num1)) {
+					cout << "Expresion incompleta" << endl;
+					return false;
+				}
+			
 			//Se suma la cantidad de parentesis que hay en la expresion
 			parenthesis ++;
 		}
 		//Validacion de cuando se abre un corchete
 		if (s == "[") {
 			//A la izquierda de una apertura de parentesis o chorchete no puede haber un digito
-			//Excepto cuando el parentesis o corhcete es el primer elemento de la expresion, por eso se valida que no estemos en la posicion 0
 			if (i > 0) {
 				//Esta variable es el elemento a la izquierda del parentesis o corchete
 				string num;
 				num = word[i - 1];
-				//Esta variable es el elemento a la derecha del parentesis o corchete
-				string num1;
-				num1 = word[i + 1];
 				//Mira si hay un numero a la izquierda
-				if (checkD(num)) {
-					cout << "Expresion incompleta" << endl;
-					return false;
-				}
-				//Debe haber un numero a la derecha, si no lo hay retorna falso
-				if (num1 == "*" || num1 == "/" || num1 == "%" || num1 == "^" || num1 == ".") {
+				if (checkD(num) && num != "[" && num != "(") {
 					cout << "Expresion incompleta" << endl;
 					return false;
 				}
 			}
+				//Esta variable es el elemento a la derecha del parentesis o corchete
+				string num1;
+				num1 = word[i + 1];
+
+				//Debe haber un numero a la derecha, si no lo hay retorna falso
+				if (!checkD(num1) && num1 != "(" && num1 != "[") {
+					cout << "Expresion incompleta" << endl;
+					return false;
+				}
+			
 			//Se suma la cantidad de corchetes que hay en la expresion
 			brackets ++;
 		}
@@ -159,11 +165,9 @@ bool Parser::checkAll(string word) {
 			if (i > 0) {
 				//Esta variable es el elemento a la derecha del parentesis o corchete
 				string num;
-				string prev;
 				num = word[i + 1];
-				prev = word[i - 1];
-				//Debe haber un numero a la derecha, si no lo hay retorna falso
-				if (checkD(num) || checkS(prev)) {
+				//No debe haber un numero a la derecha, si no lo hay retorna falso
+				if (checkD(num) && i != word.size()-1 && num != "]" && num != ")") {
 					cout << "Expresion incompleta" << endl;
 					return false;
 				}
@@ -182,8 +186,8 @@ bool Parser::checkAll(string word) {
 				//Esta variable es el elemento a la derecha del parentesis o corchete
 				string num;
 				num = word[i + 1];
-				//Debe haber un numero a la derecha, si no lo hay retorna falso
-				if (checkD(num)) {
+				//No debe haber un numero a la derecha, si no lo hay retorna falso
+				if (checkD(num) && i != word.size()-1 && num != "]" && num != ")") {
 					cout << "Expresion incompleta" << endl;
 					return false;
 				}
@@ -215,6 +219,10 @@ bool Parser::checkAll(string word) {
 						return false;
 					}
 				}
+				if (s == "/" && num1 == "0") {
+					cout << "No se puede dividir entre 0" << endl;
+					return false;
+				}
 			}
 		}
 	}
@@ -224,13 +232,16 @@ bool Parser::checkAll(string word) {
 		return false;
 	}
 	//Verifica que se cerraron todos los corchetes y parentesis
-	if (parenthesis != 0 || brackets != 0) {
+	if (parenthesis != 0b0 || brackets != 0b0) { //Feature de c++ 14 -> Binary Literals
 		cout << "Parentesis o corchetes incompleto!" << endl;
+
 		return false;
 	}
 	//Retorna verdadero si no entro en ninguna condicion
 	return true;
 }
+
+//Ya me aburri de comentar :C
 
 int Parser::precedence(string s) {
 	if (s == "^" || s == "%") {
@@ -247,36 +258,6 @@ int Parser::precedence(string s) {
 	}
 }
 
-void Parser::divideNegative() {
-	vector<string> temp;
-	for (int i = 0; i < words.size(); i++) {
-		temp.push_back(words[i]);
-	}
-	words.clear();
-	for (int z = 0; z < temp.size(); z++) {
-		if (z == 0) {
-			words.push_back(temp[z]);
-		}
-		else if (temp[z - 1] == "(" || temp[z - 1] == "[") {
-				words.push_back(temp[z]);
-		}
-		else if(firstnum(temp[z])){
-			string sign;
-			string num;
-			string w = temp[z];
-			sign = w[0];
-			w.erase(0, 1);
-			num = w;
-			words.push_back(sign);
-			words.push_back(num);
-		}
-		else {
-			words.push_back(temp[z]);
-		}
-	}
-	temp.clear();
-}
-
 void Parser::buildPost(vector<string>cmd) {
 	result.clear();
 	stak = stack<string>();
@@ -284,10 +265,7 @@ void Parser::buildPost(vector<string>cmd) {
 	int l = cmd.size();
 	if (!cmd.empty()) {
 		for (int i = 0; i < l; i++) {
-			if (firstnum(cmd[i])) {
-				result.push_back(cmd[i]);
-			}
-			else if (checkD(cmd[i])) {
+			if (checkD(cmd[i])) {
 				result.push_back(cmd[i]);
 			}
 			else if (cmd[i] == "(") {
@@ -319,135 +297,73 @@ void Parser::buildPost(vector<string>cmd) {
 					result.push_back(stak.top());
 					stak.pop();
 				}
-				if (!firstnum(cmd[i])) {
-					stak.push(cmd[i]);
-				}
+				stak.push(cmd[i]);
 			}
 		}
 		while (stak.top() != "N") {
 			result.push_back(stak.top());
-			cout << "STACK TOP: " << stak.top() << endl;
 			stak.pop();
 		}
-		for (int z = 0; z < result.size(); z++) {
-			cout << result[z] << " ----> " << z << endl;
-		}
+
 	}
 	else {
 		cout << "ERROR: stack vacio" << endl;
 	}
 }
 
-//(1+3)^[3(8-3/1)%2]
-/*
-void Parser::buildPost(vector<string>cmd) {
-	result.clear();
-	stack.clear();
-	for (int i = 0; i < cmd.size(); i++) {
-		if (checkD(cmd[i])) {
-			this->result.push_back(cmd[i]);
-		}
-		else if (checkS(cmd[i])) {
-			//Valida precedencia
-			if (i > 0) {
-				if (checkO(cmd[i])) {
-					while(stack.top())
-				}
-			}
-			//Valida si son corchetes
-			this->stack.push(cmd[i]);
-			if (cmd[i] == "]") {
-				int sizec = stack.size() - 1;
-				bool endc = false;
-				for (int z = sizec; z >= 0; z--) {
-					if (stack[z] == "[") {
-						endc = true;
-					}
-					if (stack[z] != "[" && endc == false) {
-						if (stack[z] != "]") {
-							result.push_back(stack[z]);
-						}
-						stack.pop_back();
-					}
-				}
-				stack.pop_back();
-			}
-			//Valida si son parentesis
-			if (cmd[i] == ")") {
-				int size = stack.size() - 1;
-				bool end = false;
-				for (int z = size; z >= 0; z--) {
-					if (stack[z] == "(") {
-						end = true;
-					}
-					if (stack[z] != "(" && end == false) {
-						if (stack[z] != ")") {
-							result.push_back(stack[z]);
-						}
-						stack.pop_back();
-					}
-				}
-				if (stack.empty()) {
-					cout << "Pila vacia. se escribio bien la expresion?" << endl;
-				}
-				else {
-					stack.pop_back();
-				}
-			}
-		}
-	}
-	for (int i = stack.size() - 1; i >= 0; i--) {
-		result.push_back(stack[i]);
-	}
-	for (int z = 0; z < result.size(); z++) {
-		cout << "Result: " << result[z] << endl;
+void Parser::printPost() {
+	for (int i = 0; i < result.size(); i++) {
+		cout << result[i] << endl;
 	}
 }
-*/
-int Parser::answer(vector<string>res) {
+
+float Parser::answer() {
 	vector<string> answ;
-	if (res.empty()) {
+	if (result.empty()) {
 		return NULL;
 	}
 	else {
-		for (int i = 0; i <= res.size() - 1; i++) {
-			if (checkD(res[i]) || firstnum(res[i])) {
-				answ.push_back(res[i]);
+		for (int i = 0; i <= result.size() - 1; i++) {
+			if (checkD(result[i])) {
+				answ.push_back(result[i]);
 			}
 			if (i > 0) {
-				if (checkO(res[i])) {
+				if (checkO(result[i])) {
 					int size = answ.size() - 1;
 					float num = atof(answ[size].c_str());
 					float num1 = atof(answ[size - 1].c_str());
-					if (res[i] == "+") {
+					if (result[i] == "+") {
 						float ans = num + num1;
 						string nans = to_string(ans);
 						answ.pop_back();
 						answ.pop_back();
 						answ.push_back(nans);
 					}
-					if (res[i] == "-") {
+					if (result[i] == "-") {
 						float ans = num1 - num;
 						string nans = to_string(ans);
 						answ.pop_back();
 						answ.pop_back();
 						answ.push_back(nans);
 					}
-					if (res[i] == "*") {
+					if (result[i] == "*") {
 						float ans = num * num1;
 						string nans = to_string(ans);
 						answ.pop_back();
 						answ.pop_back();
 						answ.push_back(nans);
 					}
-					if (res[i] == "/") {
-						double ans = num1 / num;
-						string nans = to_string(ans);
+					if (result[i] == "/") {
+						float ans = num1 / num;
+						stringstream s;
+						string nans;
+						s << setprecision(10) << ans;
+						nans = s.str();
 						answ.pop_back();
 						answ.pop_back();
 						answ.push_back(nans);
 					}
-					if (res[i] == "^") {
+					if (result[i] == "^") {
 						float og = num1;
 						float ans = og;
 						for (int j = 0; j < num - 1; j++) {
@@ -458,7 +374,7 @@ int Parser::answer(vector<string>res) {
 						answ.pop_back();
 						answ.push_back(nans);
 					}
-					if (res[i] == "%") {
+					if (result[i] == "%") {
 						float ans = fmod(num1, num);
 						string nans = to_string(ans);
 						answ.pop_back();
@@ -470,7 +386,6 @@ int Parser::answer(vector<string>res) {
 		}
 	}
 	float fres = atof(answ[0].c_str());
-	cout << " = " << fres<< endl;
 	answ.clear();
 	return fres;
 }
@@ -478,7 +393,7 @@ int Parser::answer(vector<string>res) {
 void Parser::buildCommand(string cmd) {
 	string infix = cmd;
 	if(checkAll(infix)){
-		std::regex words_regex("[-]*[0-9]?([0-9]*[.])?[0-9]+|[\\-\\+\\\\\(\\)\\\\[\\]\\/\\^\\%\\*]");//Feature de c++ 11 -> Regex
+		std::regex words_regex("[0-9]?([0-9]*[.])?[0-9]+|[\\-\\+\\\\\(\\)\\\\[\\]\\/\\^\\%\\*]");//Feature de c++ 11 -> Regex
 		auto words_begin = std::sregex_iterator(infix.begin(), infix.end(), words_regex);//Feature de c++ 11 -> Auto
 		auto words_end = std::sregex_iterator();
 
@@ -490,15 +405,17 @@ void Parser::buildCommand(string cmd) {
 
 void Parser::execute(string cmd) {
 	bool invalid = checkF(cmd);
-	if (!invalid) {
+	if (!invalid || cmd[0] == '-') {
 		cout << "El comando no puede iniciar con: " << cmd[0] << endl;
 		words.clear();
 	}
 	else {
-		divideNegative();
 		buildPost(words);
-		printWords();
-		answer(result);
+		if (!result.empty()) {
+			printPost();
+			printWords();
+			cout << "= " << answer() << endl;
+		}
 		words.clear();
 	}
 }
@@ -511,10 +428,18 @@ void Parser::printWords() {
 
 void Parser::loop() {
 	while (true) {
+		TDD tester = TDD();
 		string command;
 		getline(cin, command);
-		this->buildCommand(command);
-		this->execute(command);
+		if (command == "test") {
+			system("CLS");
+			tester.test();
+		}
+		else {
+			system("CLS");
+			this->buildCommand(command);
+			this->execute(command);
+		}
 	}
 }
 
