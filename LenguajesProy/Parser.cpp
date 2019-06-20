@@ -372,8 +372,13 @@ float Parser::answer() {
 					if (result[i] == "^") {
 						float og = num1;
 						float ans = og;
-						for (int j = 0; j < num - 1; j++) {
-							ans = ans * num1;
+						if (num == 0) {
+							ans = 1;
+						}
+						else {
+							for (int j = 0; j < num - 1; j++) {
+								ans = ans * num1;
+							}
 						}
 						string nans = to_string(ans);
 						answ.pop_back();

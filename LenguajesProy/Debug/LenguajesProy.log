@@ -4,13 +4,13 @@ c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajespr
 c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(327): warning C4018: '<=': signed/unsigned mismatch
 c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(334): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(335): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(394): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(402): warning C4129: '(': unrecognized character escape sequence
-c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(423): warning C4018: '<': signed/unsigned mismatch
-  c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(427): note: see reference to function template instantiation 'auto Parser::execute::<lambda_f159d1675af5db6dddae93af38743fc3>::operator ()<std::vector<std::string,std::allocator<_Ty>>>(std::vector<_Ty,std::allocator<_Ty>>) const' being compiled
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(399): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(407): warning C4129: '(': unrecognized character escape sequence
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(428): warning C4018: '<': signed/unsigned mismatch
+  c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(432): note: see reference to function template instantiation 'auto Parser::execute::<lambda_f159d1675af5db6dddae93af38743fc3>::operator ()<std::vector<std::string,std::allocator<_Ty>>>(std::vector<_Ty,std::allocator<_Ty>>) const' being compiled
           with
           [
               _Ty=std::string
           ]
-c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(436): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\documents\visual studio 2017\projects\lenguajesproy\lenguajesproy\parser.cpp(441): warning C4018: '<': signed/unsigned mismatch
   LenguajesProy.vcxproj -> C:\Users\Usuario\Documents\Visual Studio 2017\Projects\LenguajesProy\Debug\LenguajesProy.exe
