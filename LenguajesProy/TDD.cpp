@@ -10,8 +10,6 @@ bool TDD::test() {
 	Parser ptest3 = Parser();
 	Parser ptest4 = Parser();
 
-	
-
 	ptest.buildCommand(test0);
 	ptest1.buildCommand(test1);
 	ptest2.buildCommand(test2);
