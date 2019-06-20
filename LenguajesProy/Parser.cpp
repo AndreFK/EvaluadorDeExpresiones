@@ -245,6 +245,7 @@ bool Parser::checkAll(string word) {
 
 int Parser::precedence(string s) {
 	if (s == "^" || s == "%") {
+		byte a = byte{0};
 		return 3;
 	}
 	else if (s == "*" || s == "/") {
@@ -333,7 +334,12 @@ float Parser::answer() {
 					float num = atof(answ[size].c_str());
 					float num1 = atof(answ[size - 1].c_str());
 					if (result[i] == "+") {
-						float ans = num + num1;
+
+						auto adder = [](float x, float y) {
+							return x + y;
+						};
+
+						float ans = apply(adder, make_tuple(num,num1)); //Feature de c++ 17 -> apply
 						string nans = to_string(ans);
 						answ.pop_back();
 						answ.pop_back();
@@ -412,12 +418,18 @@ void Parser::execute(string cmd) {
 	else {
 		buildPost(words);
 		if (!result.empty()) {
-			printPost();
+			//printPost();
+			auto x = [](auto a) { //Feature de c++ 14 -> Lambda generico
+				for (int i = 0; i < a.size(); i++) {
+					cout << a[i] << endl;
+				}
+			};
+			x(result);
 			printWords();
 			cout << "= " << answer() << endl;
 		}
-		words.clear();
 	}
+	words.clear();
 }
 
 void Parser::printWords() {

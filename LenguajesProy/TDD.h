@@ -12,8 +12,8 @@ using namespace std;
 class TDD
 {
 private:
-	string test0 = "3+2";
-	string test1 = "(1-2)*1";
+	string test0 = "1+2";
+	decltype(test0) test1 = "(1-2)*2"; //Feature de c++ 14 -> decltype
 	string test2 = "(4+4)%4";
 	string test3 = "[(1+2)*(1+2)]^2";
 	string test4 = "(1+3)^[3+(8-3/1)%2]";

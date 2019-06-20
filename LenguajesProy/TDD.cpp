@@ -24,6 +24,10 @@ bool TDD::test() {
 	ptest3.buildPost(ptest3.words);
 	ptest4.buildPost(ptest4.words);
 
+	byte res = byte{ 0 }; //Feature de c++ 17 -> std::byte
+
+	int i = to_integer<int>(res);
+
 	if (ptest.answer() != 3) {
 		cout << "Test 1 fallido!" << " Expected = 3 Result = " << ptest.answer() << endl;
 		return false;
@@ -32,7 +36,7 @@ bool TDD::test() {
 		cout << "Test 2 fallido!" << " Expected = -2 Result = " << ptest1.answer() << endl;
 		return false;
 	}
-	else if (ptest2.answer() != 0) {
+	else if (ptest2.answer() != i) {
 		cout << "Test 3 fallido!" << " Expected = 0 Result = " << ptest2.answer() << endl;
 		return false;
 	}
